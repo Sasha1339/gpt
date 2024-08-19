@@ -17,7 +17,7 @@ MAX_ENCODER_SEQUENCE_LENGTH = 512
 MAX_DECODER_SEQUENCE_LENGTH = 512
 MAX_GENERATION_LENGTH = 512
 
-samsum_ds = tfds.load("samsum", split="train", data_dir="/Users/sesh/tensorflow_datasets/", download=True, as_supervised=True)
+samsum_ds = tfds.load("samsum", split="train", data_dir="./tensorflow_datasets", download=True, as_supervised=True)
 
 train_ds = (
     samsum_ds.map(
@@ -29,12 +29,12 @@ train_ds = (
 train_ds = train_ds.take(NUM_BATCHES)
 
 preprocessor = keras_nlp.models.BartSeq2SeqLMPreprocessor.from_preset(
-    "/Users/sesh/Documents/neyro/model/bart-keras-bart_base_en-v2",
+    "./model/bart-keras-bart_base_en-v2",
     encoder_sequence_length=MAX_ENCODER_SEQUENCE_LENGTH,
     decoder_sequence_length=MAX_DECODER_SEQUENCE_LENGTH,
 )
 bart_lm = keras_nlp.models.BartSeq2SeqLM.from_preset(
-    "/Users/sesh/Documents/neyro/model/bart-keras-bart_base_en-v2", preprocessor=preprocessor
+    "./model/bart-keras-bart_base_en-v2", preprocessor=preprocessor
 )
 
 bart_lm.summary()
@@ -60,9 +60,9 @@ bart_lm.compile(
 
 bart_lm.fit(train_ds, epochs=EPOCHS)
 
-bart_lm.save("/Users/sesh/Documents/neyro/model/gpt/location.keras")
+bart_lm.save("./model_keras/gpt/location.keras")
 
-# bart_lm = keras.models.load_model("/Users/sesh/Documents/neyro/model/gpt/location.keras")
+# bart_lm = keras.models.load_model("./model_keras/gpt/location.keras")
 def generate_text(model, input_text, max_length=200, print_time_taken=False):
     start = time.time()
     output = model.generate(input_text, max_length=max_length)
